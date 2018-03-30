@@ -27,6 +27,7 @@ Meteor.method("/user/register",function(obj){
                 organizationId: orgId,
                 department:"administrators",
                 role:"administrators",
+                roleName: obj.userName,
             };
             var profileId  = Profile.insert(profile);
             if(profileId){
@@ -59,7 +60,6 @@ Meteor.method("/user/login",function(obj){
     var phoneNum = obj.phoneNum;
     var passWord = obj.passWord;
     var user = User.findOne({phoneNum:phoneNum});
-    console.log(user);
     var status = {};
     if(user){
         var userRight = User.findOne({phoneNum:phoneNum,passWord:passWord});
@@ -113,7 +113,10 @@ Meteor.method("/updateData",function(obj){//userId,profileId(多个),orgId(多�
     for(var i=0;i<allProfile.length;i++){
         var orgId = allProfile[i].organizationId;
         var project = Project.find({organizationId:orgId}).fetch();
-        allOrganization = Organization.find({_id:orgId}).fetch();
+        var oneAllOrg = Organization.find({_id:orgId}).fetch();
+        for(var j=0;j<oneAllOrg.length;j++){
+            allOrganization.push(oneAllOrg[j]);
+        }
         allProject.push(project);
         allOrgId.push(orgId);
     }
@@ -305,6 +308,7 @@ Meteor.method("/project/addMembers",function(obj){
                 organizationId: obj.organizationId,
                 department:obj.department,
                 role:obj.role,
+                roleName: obj.userName,
             }
             var profileId = Profile.insert(newProfile);
             result.statusCode = 1;
@@ -329,6 +333,7 @@ Meteor.method("/project/addMembers",function(obj){
         organizationId: obj.organizationId,
         department:obj.department,
         role:obj.role,
+        roleName: obj.userName,
     };
     var profileId  = Profile.insert(profile);
     if(profileId){
