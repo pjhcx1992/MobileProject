@@ -1,0 +1,21 @@
+Meteor.startup(function(){
+	Tracker.autorun(function () {
+		Meteor.subscribe("User");
+		Meteor.subscribe("Profile");
+		Meteor.subscribe("Project");
+		Meteor.subscribe("Organization");
+		Meteor.subscribe("Well");
+		Meteor.subscribe("LightBox",);
+		Meteor.subscribe("Pole")
+		Meteor.subscribe("ODF");
+		Meteor.subscribe("UpPoint");
+		Meteor.subscribe("WallHang");
+		Meteor.subscribe("JointBox");
+		Meteor.subscribe("Other");
+		Meteor.subscribe("Cable");
+		Meteor.subscribe("Conduit");
+		Meteor.subscribe("CableSegment");
+		Meteor.subscribe("CoreRFID");
+		Meteor.subscribe("JumpCable");
+	});
+});
