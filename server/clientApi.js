@@ -107,6 +107,9 @@ Meteor.method("/updateData",function(obj){//userId,profileId(多个),orgId(多�
     var allOther  = new Array();
     var allConduit=new Array();
     var allCableSegment=new Array();
+    var allCable=new Array();
+    var allCoreRFID=new Array();
+    var allJumpCable=new Array();
     var user = User.findOne({_id:obj.userId});
     var allProfile = Profile.find({userId:obj.userId}).fetch();
     var allOrgId = new Array();
@@ -130,6 +133,9 @@ Meteor.method("/updateData",function(obj){//userId,profileId(多个),orgId(多�
     allOther = Other.find({orgId:{$in:allOrgId}}).fetch();
     allConduit=Conduit.find({orgId:{$in:allOrgId}}).fetch();
     allCableSegment=CableSegment.find({orgId:{$in:allOrgId}}).fetch();
+    allCable = Cable.find().fetch();
+    allCoreRFID = CoreRFID.find().fetch();
+    allJumpCable = JumpCable.find().fetch();
     result = {
         allWell:allWell,
         allPole:allPole,
@@ -144,8 +150,10 @@ Meteor.method("/updateData",function(obj){//userId,profileId(多个),orgId(多�
         allOrganization:allOrganization,
         allConduit:allConduit,
         allCableSegment:allCableSegment,
-        user:user
-
+        user:user,
+        allCable:allCable,
+        allCoreRFID:allCoreRFID,
+        allJumpCable:allJumpCable,
     }
     return result;
     // if(obj.time == null){
@@ -242,7 +250,7 @@ Meteor.method("/project/create",function(obj){
     var project = {
         name: obj.name,
         states: obj.states,
-        aproveResult: obj.aproveResult,
+        approveResult: obj.approveResult,
         addTime: obj.addTime,
         createMember:obj.userId,
         organizationId:obj.organizationId,
@@ -579,7 +587,7 @@ Meteor.method("/annotation/update",function(obj){
     var allCableSegment=new Array();
 
     var addConduit = obj.addConduit;
-    var addCableSegment = obj.addCableSegment;
+    var addCableSegment = obj.addCabelSegment;
 
     var removeConduit = obj.removeConduit;
     var removeCableSegment = obj.removeCableSegment;
@@ -591,12 +599,22 @@ Meteor.method("/annotation/update",function(obj){
 
     //删除管道
     for(var a = 0;a<removeConduit.length;a++){
-        var  conduit= Conduit.remove({_id:removeConduit[a]});
+        if(removeConduit[a]._id){
+            var  conduit= Conduit.remove({_id:removeConduit[a]._id});
+        }
+        else {
+            var conduit = Conduit.remove({_id: removeConduit[a]});
+        }
     }
 
     //删除光缆
     for(var  b = 0;b<removeCableSegment.length;b++){
-        var  cablesegment= CableSegment.remove({_id:removeCableSegment[b]});
+        if(removeCableSegment[b]._id){
+            var  cablesegment= CableSegment.remove({_id:removeCableSegment[b]._id});
+        }
+        else {
+            var cablesegment = Conduit.remove({_id: removeCableSegment[b]});
+        }
     }
 
 
